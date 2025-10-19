@@ -32,37 +32,37 @@ OptionsController::OptionsController(QObject *parent) :
 
 bool OptionsController::anyEdited() const
 {
-    return m_iniUserEdited || confToEdit()->anyEdited();
+    return m_iniUserEdited || confToEdit().anyEdited();
 }
 
 void OptionsController::setOptEdited()
 {
-    if (!confToEdit()->optEdited()) {
-        confToEdit()->setOptEdited();
+    if (!confToEdit().optEdited()) {
+        confToEdit().setOptEdited();
         emitEdited(true);
     }
 }
 
 void OptionsController::setFlagsEdited()
 {
-    if (!confToEdit()->flagsEdited()) {
-        confToEdit()->setFlagsEdited();
+    if (!confToEdit().flagsEdited()) {
+        confToEdit().setFlagsEdited();
         emitEdited(true);
     }
 }
 
 void OptionsController::setIniEdited()
 {
-    if (!confToEdit()->iniEdited()) {
-        confToEdit()->setIniEdited();
+    if (!confToEdit().iniEdited()) {
+        confToEdit().setIniEdited();
         emitEdited(true);
     }
 }
 
 void OptionsController::setTaskEdited()
 {
-    if (!confToEdit()->taskEdited()) {
-        confToEdit()->setTaskEdited();
+    if (!confToEdit().taskEdited()) {
+        confToEdit().setTaskEdited();
         emitEdited(true);
     }
 }
@@ -96,7 +96,7 @@ void OptionsController::save(bool closeOnSuccess)
     emit aboutToSave();
 
     const bool isAnyEdited = this->anyEdited();
-    const bool isConfEdited = confToEdit()->anyEdited();
+    const bool isConfEdited = confToEdit().anyEdited();
 
     if (isAnyEdited) {
         qCDebug(LC) << "Conf save";
@@ -129,12 +129,12 @@ void OptionsController::saveIniUser(bool onlyFlags)
 
 void OptionsController::initConfToEdit()
 {
-    confToEdit()->copy(*conf());
+    confToEdit().copy(conf());
 }
 
 void OptionsController::resetConfToEdit()
 {
-    confToEdit()->resetEdited();
+    confToEdit().resetEdited();
 
     iniOptToEdit().clear();
     iniUserToEdit().clear();

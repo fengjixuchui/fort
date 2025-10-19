@@ -348,7 +348,7 @@ bool FortManager::setupDriver()
 void FortManager::closeDriver()
 {
     updateLogManager(false);
-    updateStatManager(nullptr);
+    updateStatManager(false);
 
     driverManager()->closeDevice();
 
@@ -559,7 +559,7 @@ void FortManager::updateDriverConf(bool onlyFlags)
 
     const bool ok = confAppManager->updateDriverConf(onlyFlags);
     if (ok) {
-        updateStatManager(conf());
+        updateStatManager(true);
     }
 
     updateLogManager(true);
@@ -570,9 +570,9 @@ void FortManager::updateLogManager(bool active)
     logManager()->setActive(active);
 }
 
-void FortManager::updateStatManager(FirewallConf *conf)
+void FortManager::updateStatManager(bool active)
 {
-    statManager()->setConf(conf);
+    statManager()->setActive(active);
 }
 
 void FortManager::setupPortableResource()

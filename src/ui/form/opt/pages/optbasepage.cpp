@@ -7,7 +7,7 @@ OptBasePage::OptBasePage(OptionsController *ctrl, QWidget *parent) : QFrame(pare
     setupController();
 }
 
-FirewallConf *OptBasePage::conf() const
+FirewallConf &OptBasePage::conf() const
 {
     return ctrl()->confToEdit();
 }

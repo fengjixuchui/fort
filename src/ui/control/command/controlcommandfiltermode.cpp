@@ -38,9 +38,9 @@ FirewallConf::FilterMode filterModeByText(const QString &commandText, bool &repo
     return FirewallConf::ModeInvalid;
 }
 
-bool reportCommandFilterMode(ProcessCommandResult &r, FirewallConf *conf)
+bool reportCommandFilterMode(ProcessCommandResult &r, const FirewallConf &conf)
 {
-    const auto filterMode = conf->filterMode();
+    const auto filterMode = conf.filterMode();
 
     r.commandResult = Control::CommandResult(Control::CommandResultBase + filterMode);
 
@@ -54,13 +54,13 @@ bool processCommandFilterModeAction(
 {
     auto confManager = Fort::confManager();
 
-    auto conf = confManager->conf();
+    auto &conf = confManager->conf();
 
     if (report) {
         return reportCommandFilterMode(r, conf);
     }
 
-    conf->setFilterMode(filterMode);
+    conf.setFilterMode(filterMode);
 
     return confManager->saveFlags();
 }

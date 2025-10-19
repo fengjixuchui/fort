@@ -477,7 +477,7 @@ bool ConfManager::applyConfPeriods(bool onlyFlags)
 {
     m_confTimer.stop();
 
-    if (!conf()->updateGroupPeriods(onlyFlags))
+    if (!conf().updateGroupPeriods(onlyFlags))
         return false;
 
     m_confTimer.start(CONF_PERIODS_UPDATE_INTERVAL);
@@ -487,7 +487,7 @@ bool ConfManager::applyConfPeriods(bool onlyFlags)
 
 void ConfManager::applyFilterOffSeconds()
 {
-    const bool isFilterOff = !conf()->filterEnabled();
+    const bool isFilterOff = !conf().filterEnabled();
     const int filterOffMsec = isFilterOff ? ini().filterOffSeconds() * 1000 : 0;
 
     const bool isTimerActive =
@@ -504,7 +504,7 @@ void ConfManager::applyFilterOffSeconds()
 
 void ConfManager::applyAutoLearnSeconds()
 {
-    const bool isAutoLearn = (conf()->filterMode() == FirewallConf::ModeAutoLearn);
+    const bool isAutoLearn = (conf().filterMode() == FirewallConf::ModeAutoLearn);
     const int autoLearnMsec = isAutoLearn ? ini().autoLearnSeconds() * 1000 : 0;
 
     const bool isTimerActive =
@@ -533,32 +533,26 @@ void ConfManager::setupTimers()
 
 void ConfManager::updateConfPeriods()
 {
-    const auto activeGroupBits = conf() ? conf()->activeGroupBits() : 0;
+    const auto activeGroupBits = conf().activeGroupBits();
 
     if (!applyConfPeriods(/*onlyFlags=*/false))
         return;
 
-    if (conf() && activeGroupBits != conf()->activeGroupBits()) {
+    if (activeGroupBits != conf().activeGroupBits()) {
         emit confPeriodsChanged();
     }
 }
 
 void ConfManager::switchFilterOff()
 {
-    if (!conf())
-        return;
-
-    conf()->setFilterEnabled(true);
+    conf().setFilterEnabled(true);
 
     saveFlags();
 }
 
 void ConfManager::switchAutoLearn()
 {
-    if (!conf())
-        return;
-
-    conf()->setFilterMode(FirewallConf::ModeBlockAll);
+    conf().setFilterMode(FirewallConf::ModeBlockAll);
 
     saveFlags();
 }
@@ -619,23 +613,23 @@ bool ConfManager::loadConf(FirewallConf &conf)
 
 void ConfManager::load()
 {
-    if (!loadConf(*conf())) {
+    if (!loadConf(conf())) {
         showErrorMessage(tr("Cannot load Settings"));
         return;
     }
 
-    applySavedConf(*conf());
+    applySavedConf(conf());
 }
 
-bool ConfManager::save(FirewallConf *newConf, IniOptions &ini)
+bool ConfManager::save(FirewallConf &newConf, IniOptions &ini)
 {
-    if (!newConf->anyEdited())
+    if (!newConf.anyEdited())
         return true;
 
-    if (!(validateConf(*newConf) && saveConf(*newConf, ini)))
+    if (!(validateConf(newConf) && saveConf(newConf, ini)))
         return false;
 
-    applySavedConf(*newConf);
+    applySavedConf(newConf);
 
     return true;
 }
@@ -668,12 +662,12 @@ void ConfManager::applySavedConf(FirewallConf &newConf)
 
     const bool onlyFlags = !newConf.optEdited();
 
-    if (conf() != &newConf) {
+    if (&conf() != &newConf) {
         if (onlyFlags) {
-            conf()->copyFlags(newConf);
+            conf().copyFlags(newConf);
             newConf.resetEdited();
         } else {
-            conf()->copy(newConf);
+            conf().copy(newConf);
         }
     }
 
@@ -681,29 +675,29 @@ void ConfManager::applySavedConf(FirewallConf &newConf)
     applyFilterOffSeconds();
     applyAutoLearnSeconds();
 
-    emit confChanged(onlyFlags, conf()->editedFlags());
+    emit confChanged(onlyFlags, conf().editedFlags());
 
-    if (conf()->iniEdited()) {
+    if (conf().iniEdited()) {
         emit iniChanged();
     }
 
-    conf()->resetEdited();
+    conf().resetEdited();
 }
 
 bool ConfManager::saveFlags()
 {
-    conf()->setFlagsEdited();
+    conf().setFlagsEdited();
 
     return save(conf(), ini());
 }
 
 void ConfManager::saveIni()
 {
-    conf()->setIniEdited();
+    conf().setIniEdited();
 
-    saveConf(*conf(), ini());
+    saveConf(conf(), ini());
 
-    conf()->resetEdited();
+    conf().resetEdited();
 }
 
 void ConfManager::saveIniUser()
@@ -720,7 +714,7 @@ void ConfManager::saveIniUser(IniUser &iniUser, bool onlyFlags)
 
 QVariant ConfManager::toPatchVariant(const IniOptions &ini, bool onlyFlags, uint editedFlags) const
 {
-    return onlyFlags ? conf()->toVariant(ini, /*onlyEdited=*/true) // send only flags to clients
+    return onlyFlags ? conf().toVariant(ini, /*onlyEdited=*/true) // send only flags to clients
                      : FirewallConf::editedFlagsToVariant(
                                editedFlags); // clients have to reload all from storage
 }
@@ -729,12 +723,12 @@ bool ConfManager::saveVariant(const QVariant &confVar)
 {
     auto &ini = Fort::ini();
 
-    conf()->fromVariant(ini, confVar, /*onlyEdited=*/true);
+    conf().fromVariant(ini, confVar, /*onlyEdited=*/true);
 
-    if (!saveConf(*conf(), ini))
+    if (!saveConf(conf(), ini))
         return false;
 
-    applySavedConf(*conf());
+    applySavedConf(conf());
 
     return true;
 }

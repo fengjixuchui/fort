@@ -117,7 +117,7 @@ void OptionsWindow::checkDeprecated()
 
 void OptionsWindow::checkDeprecatedAppGroups()
 {
-    if (!conf()->checkDeprecatedAppGroups()) {
+    if (!conf().checkDeprecatedAppGroups()) {
         windowManager()->showConfirmBox(
                 [&] { OsUtil::openUrlOrFolder("https://github.com/tnodir/fort/discussions/210"); },
                 tr("Please move Texts of Allow/Block fields from App Groups to Wildcard Programs!!!"

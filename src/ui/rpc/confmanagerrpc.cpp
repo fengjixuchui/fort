@@ -127,9 +127,9 @@ void ConfManagerRpc::onConfChanged(const QVariant &confVar)
         load();
     } else {
         // Apply only flags
-        conf()->fromVariant(ini(), confVar, /*onlyEdited=*/true);
+        conf().fromVariant(ini(), confVar, /*onlyEdited=*/true);
 
-        applySavedConf(*conf());
+        applySavedConf(conf());
     }
 
     if (!saving()) {

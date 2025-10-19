@@ -362,7 +362,7 @@ bool ConfAppManager::deleteAppPath(const QString &appOriginPath)
 
 bool ConfAppManager::addOrUpdateApp(App &app, bool onlyUpdate)
 {
-    const AppGroup *appGroup = conf()->appGroupAt(app.groupIndex);
+    const AppGroup *appGroup = conf().appGroupAt(app.groupIndex);
     if (appGroup->isNull())
         return false;
 
@@ -811,7 +811,7 @@ bool ConfAppManager::updateDriverConf(bool onlyFlags)
 {
     ConfBuffer confBuf;
 
-    const auto &conf = *Fort::conf();
+    const auto &conf = Fort::conf();
 
     const bool ok = onlyFlags ? (confBuf.writeFlags(conf), true)
                               : confBuf.writeConf(conf, this, envManager());

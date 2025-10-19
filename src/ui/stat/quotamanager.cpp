@@ -153,10 +153,10 @@ QString QuotaManager::quotaAlertedIniKey(AlertType alertType)
 
 void QuotaManager::processQuotaExceed(AlertType alertType)
 {
-    auto conf = Fort::conf();
+    auto &conf = Fort::conf();
 
-    if (ini().quotaBlockInetTraffic() && !conf->blockInetTraffic()) {
-        conf->setBlockInetTraffic(true);
+    if (ini().quotaBlockInetTraffic() && !conf.blockInetTraffic()) {
+        conf.setBlockInetTraffic(true);
         confManager()->saveFlags();
     }
 

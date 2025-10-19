@@ -40,16 +40,15 @@ LogManager::LogManager(QObject *parent) : QObject(parent) { }
 
 void LogManager::setActive(bool active)
 {
-    if (m_active != active) {
-        m_active = active;
+    if (m_active == active)
+        return;
 
-        if (m_active) {
-            readLogAsync();
-        } else {
-            cancelAsyncIo();
-        }
+    m_active = active;
 
-        emit activeChanged();
+    if (m_active) {
+        readLogAsync();
+    } else {
+        cancelAsyncIo();
     }
 }
 

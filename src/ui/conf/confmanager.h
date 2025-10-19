@@ -26,8 +26,8 @@ public:
 
     SqliteDb *sqliteDb() const override { return m_sqliteDb.data(); }
 
-    FirewallConf *conf() { return &m_conf; }
-    const FirewallConf *conf() const { return &m_conf; }
+    FirewallConf &conf() { return m_conf; }
+    const FirewallConf &conf() const { return m_conf; }
 
     void setUp() override;
 
@@ -36,7 +36,7 @@ public:
     bool loadConf(FirewallConf &conf);
     void load();
 
-    bool save(FirewallConf *newConf, IniOptions &ini);
+    bool save(FirewallConf &newConf, IniOptions &ini);
     virtual bool saveConf(FirewallConf &conf, IniOptions &ini);
     void applySavedConf(FirewallConf &newConf);
 

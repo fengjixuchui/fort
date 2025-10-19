@@ -55,7 +55,7 @@ void SchedulePage::onResetToDefault()
 
 void SchedulePage::onAboutToSave()
 {
-    if (conf()->taskEdited()) {
+    if (conf().taskEdited()) {
         ini().setTaskInfoList(taskListModel()->toVariant());
     }
 }

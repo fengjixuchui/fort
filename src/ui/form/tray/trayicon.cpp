@@ -202,9 +202,9 @@ QAction *addAction(QWidget *widget, const AddActionArgs &a)
     return action;
 }
 
-bool checkAlertFilterMode(FirewallConf *conf, const IniUser &iniUser)
+bool checkAlertFilterMode(const FirewallConf &conf, const IniUser &iniUser)
 {
-    switch (conf->filterMode()) {
+    switch (conf.filterMode()) {
     case FirewallConf::ModeAutoLearn:
         return iniUser.progAlertWindowAutoLearn();
     case FirewallConf::ModeAskToConnect:
@@ -664,14 +664,14 @@ void TrayIcon::updateTrayMenuFlags()
             (!settings()->isPasswordRequired() && !windowManager()->isWindowOpen(WindowOptions));
 
     m_filterEnabledAction->setEnabled(editEnabled);
-    m_filterEnabledAction->setChecked(conf()->filterEnabled());
+    m_filterEnabledAction->setChecked(conf().filterEnabled());
 
     m_snoozeAlertsAction->setEnabled(editEnabled);
     m_snoozeAlertsAction->setChecked(iniUser().progSnoozeAlerts());
 
     m_blockTrafficMenu->setEnabled(editEnabled);
     {
-        const int index = conf()->blockTrafficIndex();
+        const int index = conf().blockTrafficIndex();
         QAction *action = m_blockTrafficActions->actions().at(index);
         if (!action->isChecked()) {
             action->setChecked(true);
@@ -681,7 +681,7 @@ void TrayIcon::updateTrayMenuFlags()
 
     m_filterModeMenu->setEnabled(editEnabled);
     {
-        const int index = conf()->filterMode();
+        const int index = conf().filterMode();
         QAction *action = m_filterModeActions->actions().at(index);
         if (!action->isChecked()) {
             action->setChecked(true);
@@ -694,7 +694,7 @@ void TrayIcon::updateTrayMenuFlags()
         if (!action->isVisible())
             break;
 
-        const bool appGroupEnabled = conf()->appGroupEnabled(appGroupIndex++);
+        const bool appGroupEnabled = conf().appGroupEnabled(appGroupIndex++);
 
         action->setEnabled(editEnabled);
         action->setChecked(appGroupEnabled);
@@ -704,7 +704,7 @@ void TrayIcon::updateTrayMenuFlags()
 void TrayIcon::updateAppGroupActions()
 {
     const int trayMaxGroups = iniUser().trayMaxGroups(MAX_APP_GROUP_COUNT);
-    const int appGroupsCount = qMin(conf()->appGroups().size(), trayMaxGroups);
+    const int appGroupsCount = qMin(conf().appGroups().size(), trayMaxGroups);
 
     for (int i = 0; i < MAX_APP_GROUP_COUNT; ++i) {
         QAction *action = m_appGroupActions.at(i);
@@ -713,7 +713,7 @@ void TrayIcon::updateAppGroupActions()
         QString menuLabel;
 
         if (visible) {
-            const AppGroup *appGroup = conf()->appGroups().at(i);
+            const AppGroup *appGroup = conf().appGroups().at(i);
             menuLabel = appGroup->menuLabel();
         }
 
@@ -850,11 +850,11 @@ QIcon TrayIcon::getTrayIcon() const
 
 QString TrayIcon::trayIconPath(bool &isDefault) const
 {
-    if (!conf()->filterEnabled() || !driverManager()->isDeviceOpened()) {
+    if (!conf().filterEnabled() || !driverManager()->isDeviceOpened()) {
         return ":/icons/fort_gray.png";
     }
 
-    return trayIconBlockPath(conf()->blockTrafficIndex(), isDefault);
+    return trayIconBlockPath(conf().blockTrafficIndex(), isDefault);
 }
 
 QString TrayIcon::trayIconBlockPath(int blockType, bool &isDefault) const
@@ -875,15 +875,15 @@ QString TrayIcon::trayIconBlockPath(int blockType, bool &isDefault) const
 
 void TrayIcon::saveTrayFlags()
 {
-    conf()->setFilterEnabled(m_filterEnabledAction->isChecked());
+    conf().setFilterEnabled(m_filterEnabledAction->isChecked());
     iniUser().setProgSnoozeAlerts(m_snoozeAlertsAction->isChecked());
 
     // Set Block Traffic
     {
         QAction *action = m_blockTrafficActions->checkedAction();
         const int index = m_blockTrafficActions->actions().indexOf(action);
-        if (conf()->blockTrafficIndex() != index) {
-            conf()->setBlockTrafficIndex(index);
+        if (conf().blockTrafficIndex() != index) {
+            conf().setBlockTrafficIndex(index);
             updateBlockTrafficMenuIcon(index);
         }
     }
@@ -892,15 +892,15 @@ void TrayIcon::saveTrayFlags()
     {
         QAction *action = m_filterModeActions->checkedAction();
         const int index = m_filterModeActions->actions().indexOf(action);
-        if (conf()->filterMode() != index) {
-            conf()->setFilterMode(FirewallConf::FilterMode(index));
+        if (conf().filterMode() != index) {
+            conf().setFilterMode(FirewallConf::FilterMode(index));
             updateFilterModeMenuIcon(index);
         }
     }
 
     // Set App. Groups' enabled states
     int i = 0;
-    for (AppGroup *appGroup : conf()->appGroups()) {
+    for (AppGroup *appGroup : conf().appGroups()) {
         const QAction *action = m_appGroupActions.at(i++);
         if (!action->isVisible())
             break;
@@ -950,7 +950,7 @@ void TrayIcon::switchTrayFlag(bool checked)
 void TrayIcon::switchBlockTraffic(QAction *action)
 {
     const int index = m_blockTrafficActions->actions().indexOf(action);
-    if (index < 0 || index == conf()->blockTrafficIndex())
+    if (index < 0 || index == conf().blockTrafficIndex())
         return;
 
     if (iniUser().confirmTrayFlags()) {
@@ -960,7 +960,7 @@ void TrayIcon::switchBlockTraffic(QAction *action)
                         saveTrayFlags();
                     } else {
                         QAction *a =
-                                m_blockTrafficActions->actions().at(conf()->blockTrafficIndex());
+                                m_blockTrafficActions->actions().at(conf().blockTrafficIndex());
                         a->setChecked(true);
                     }
                 },
@@ -973,7 +973,7 @@ void TrayIcon::switchBlockTraffic(QAction *action)
 void TrayIcon::switchFilterMode(QAction *action)
 {
     const int index = m_filterModeActions->actions().indexOf(action);
-    if (index < 0 || index == conf()->filterMode())
+    if (index < 0 || index == conf().filterMode())
         return;
 
     if (iniUser().confirmTrayFlags()) {
@@ -982,7 +982,7 @@ void TrayIcon::switchFilterMode(QAction *action)
                     if (confirmed) {
                         saveTrayFlags();
                     } else {
-                        QAction *a = m_filterModeActions->actions().at(conf()->filterMode());
+                        QAction *a = m_filterModeActions->actions().at(conf().filterMode());
                         a->setChecked(true);
                     }
                 },

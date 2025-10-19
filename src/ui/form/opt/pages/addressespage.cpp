@@ -44,7 +44,7 @@ void AddressesPage::onResetToDefault()
         addressGroup->resetToDefault();
     }
 
-    conf()->setupDefaultAddressGroups();
+    conf().setupDefaultAddressGroups();
 
     updateUi();
 }
@@ -117,13 +117,13 @@ QLayout *AddressesPage::setupColumn2()
 
 void AddressesPage::setupLanBox()
 {
-    m_cbFilterLocals = ControlUtil::createCheckBox(conf()->filterLocals(), [&](bool checked) {
-        conf()->setFilterLocals(checked);
+    m_cbFilterLocals = ControlUtil::createCheckBox(conf().filterLocals(), [&](bool checked) {
+        conf().setFilterLocals(checked);
         ctrl()->setFlagsEdited();
     });
 
-    m_cbFilterLocalNet = ControlUtil::createCheckBox(conf()->filterLocalNet(), [&](bool checked) {
-        conf()->setFilterLocalNet(checked);
+    m_cbFilterLocalNet = ControlUtil::createCheckBox(conf().filterLocalNet(), [&](bool checked) {
+        conf().setFilterLocalNet(checked);
         ctrl()->setFlagsEdited();
     });
 
@@ -260,7 +260,7 @@ void AddressesPage::updateUi()
 
 const QList<AddressGroup *> &AddressesPage::addressGroups() const
 {
-    return conf()->addressGroups();
+    return conf().addressGroups();
 }
 
 AddressGroup *AddressesPage::inetAddressGroup() const

@@ -8,6 +8,7 @@
 #include <sqlite/sqlitestmt.h>
 
 #include <appinfo/appinfocache.h>
+#include <conf/confmanager.h>
 #include <conf/firewallconf.h>
 #include <driver/drivercommon.h>
 #include <fortglobal.h>
@@ -82,15 +83,22 @@ StatManager::StatManager(const QString &filePath, QObject *parent, quint32 openF
 {
 }
 
-void StatManager::setConf(const FirewallConf *conf)
+void StatManager::setActive(bool active)
 {
-    m_conf = conf;
+    if (m_active == active)
+        return;
 
-    setupByConf();
+    m_active = active;
+
+    if (!m_active) {
+        logClear();
+    }
 }
 
 void StatManager::setUp()
 {
+    setupConfManager();
+
     setupDb();
 }
 
@@ -101,22 +109,12 @@ void StatManager::setupTrafDate()
 
 void StatManager::setupByConf()
 {
-    if (!conf()) {
-        logClear();
-    }
+    const auto &conf = Fort::conf();
 
     m_tickSecs = 0;
 
-    if (conf()) {
-        setupActivePeriod();
-    }
-}
-
-void StatManager::setupActivePeriod()
-{
-    m_activePeriodFrom = DateUtil::parseTime(conf()->activePeriodFrom());
-
-    m_activePeriodTo = DateUtil::parseTime(conf()->activePeriodTo());
+    m_activePeriodFrom = DateUtil::parseTime(conf.activePeriodFrom());
+    m_activePeriodTo = DateUtil::parseTime(conf.activePeriodTo());
 }
 
 void StatManager::updateActivePeriod(qint32 tickSecs)
@@ -130,7 +128,7 @@ void StatManager::updateActivePeriod(qint32 tickSecs)
 
     m_isActivePeriod = true;
 
-    if (conf() && conf()->activePeriodEnabled()) {
+    if (conf().activePeriodEnabled()) {
         const QTime now = DateUtil::currentTime();
 
         m_isActivePeriod = DateUtil::isTimeInPeriod(now, m_activePeriodFrom, m_activePeriodTo);
@@ -212,6 +210,13 @@ bool StatManager::clearTraffic()
     return true;
 }
 
+void StatManager::setupConfManager()
+{
+    auto confManager = Fort::dependency<ConfManager>();
+
+    connect(confManager, &ConfManager::confChanged, this, &StatManager::setupByConf);
+}
+
 bool StatManager::setupDb()
 {
     if (!sqliteDb()->open()) {
@@ -288,7 +293,7 @@ bool StatManager::logStatTraf(const LogEntryStatTraf &entry, qint64 unixTime)
     // Active period
     updateActivePeriod(qint32(unixTime));
 
-    const bool logStat = conf() && conf()->logStat() && m_isActivePeriod;
+    const bool logStat = m_active && conf().logStat() && m_isActivePeriod;
 
     const bool isNewDay = updateTrafDay(unixTime);
 

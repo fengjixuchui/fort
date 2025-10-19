@@ -96,11 +96,11 @@ void OptionsPage::onAboutToSave_filterMode()
     if (filterModeEdited())
         return;
 
-    const auto oldFilterMode = Fort::conf()->filterMode();
+    const auto oldFilterMode = Fort::conf().filterMode();
 
-    if (conf()->filterMode() != oldFilterMode) {
+    if (conf().filterMode() != oldFilterMode) {
         // Reset to the new value, when auto-switched from Auto-learn
-        conf()->setFilterMode(oldFilterMode);
+        conf().setFilterMode(oldFilterMode);
     }
 }
 
@@ -118,7 +118,7 @@ void OptionsPage::onAboutToSave_password()
         if (!ini.hasPassword()) {
             settings->resetCheckedPassword();
         }
-    } else if (conf()->iniEdited()) {
+    } else if (conf().iniEdited()) {
         ini.setHasPassword(settings->hasPassword());
     }
 }
@@ -185,13 +185,13 @@ void OptionsPage::onRetranslateUi()
 void OptionsPage::retranslateComboBlockTraffic()
 {
     updateComboBox(m_comboBlockTraffic, FirewallConf::blockTrafficNames(),
-            FirewallConf::blockTrafficIconPaths(), conf()->blockTrafficIndex());
+            FirewallConf::blockTrafficIconPaths(), conf().blockTrafficIndex());
 }
 
 void OptionsPage::retranslateComboFilterMode()
 {
     updateComboBox(m_comboFilterMode, FirewallConf::filterModeNames(),
-            FirewallConf::filterModeIconPaths(), conf()->filterMode());
+            FirewallConf::filterModeIconPaths(), conf().filterMode());
 }
 
 void OptionsPage::retranslateTimedOptions()
@@ -273,8 +273,8 @@ QLayout *OptionsPage::setupColumn2()
 void OptionsPage::setupTrafficBox()
 {
     // Filter Enabled
-    m_cbFilterEnabled = ControlUtil::createCheckBox(conf()->filterEnabled(), [&](bool checked) {
-        conf()->setFilterEnabled(checked);
+    m_cbFilterEnabled = ControlUtil::createCheckBox(conf().filterEnabled(), [&](bool checked) {
+        conf().setFilterEnabled(checked);
         ctrl()->setFlagsEdited();
     });
 
@@ -285,8 +285,8 @@ void OptionsPage::setupTrafficBox()
     auto filterModeLayout = setupFilterModeLayout();
 
     // Group Blocked
-    m_cbGroupBlocked = ControlUtil::createCheckBox(conf()->groupBlocked(), [&](bool checked) {
-        conf()->setGroupBlocked(checked);
+    m_cbGroupBlocked = ControlUtil::createCheckBox(conf().groupBlocked(), [&](bool checked) {
+        conf().setGroupBlocked(checked);
         ctrl()->setFlagsEdited();
     });
 
@@ -313,8 +313,8 @@ QLayout *OptionsPage::setupBlockTrafficLayout()
 
     m_comboBlockTraffic =
             ControlUtil::createComboBox(FirewallConf::blockTrafficNames(), [&](int index) {
-                if (conf()->blockTrafficIndex() != index) {
-                    conf()->setBlockTrafficIndex(index);
+                if (conf().blockTrafficIndex() != index) {
+                    conf().setBlockTrafficIndex(index);
                     ctrl()->setFlagsEdited();
                 }
             });
@@ -329,8 +329,8 @@ QLayout *OptionsPage::setupFilterModeLayout()
 
     m_comboFilterMode =
             ControlUtil::createComboBox(FirewallConf::filterModeNames(), [&](int index) {
-                if (conf()->filterMode() != index) {
-                    conf()->setFilterMode(FirewallConf::FilterMode(index));
+                if (conf().filterMode() != index) {
+                    conf().setFilterMode(FirewallConf::FilterMode(index));
                     ctrl()->setFlagsEdited();
                     setFilterModeEdited(true);
                 }
@@ -381,13 +381,13 @@ void OptionsPage::setupAutoLearnSeconds()
 
 void OptionsPage::setupProtectionBox()
 {
-    m_cbBootFilter = ControlUtil::createCheckBox(conf()->bootFilter(), [&](bool checked) {
-        conf()->setBootFilter(checked);
+    m_cbBootFilter = ControlUtil::createCheckBox(conf().bootFilter(), [&](bool checked) {
+        conf().setBootFilter(checked);
         ctrl()->setFlagsEdited();
     });
 
-    m_cbStealthMode = ControlUtil::createCheckBox(conf()->stealthMode(), [&](bool checked) {
-        conf()->setStealthMode(checked);
+    m_cbStealthMode = ControlUtil::createCheckBox(conf().stealthMode(), [&](bool checked) {
+        conf().setStealthMode(checked);
         ctrl()->setFlagsEdited();
     });
 
@@ -513,9 +513,9 @@ void OptionsPage::setupProgBox()
 
 void OptionsPage::setupLogApp()
 {
-    m_cbLogApp = ControlUtil::createCheckBox(conf()->logApp(), [&](bool checked) {
-        if (conf()->logApp() != checked) {
-            conf()->setLogApp(checked);
+    m_cbLogApp = ControlUtil::createCheckBox(conf().logApp(), [&](bool checked) {
+        if (conf().logApp() != checked) {
+            conf().setLogApp(checked);
             ctrl()->setFlagsEdited();
         }
     });
@@ -563,8 +563,8 @@ void OptionsPage::setupLogsBox()
         ctrl()->setIniEdited();
     });
 
-    m_cbTraceEvents = ControlUtil::createCheckBox(conf()->traceEvents(), [&](bool checked) {
-        conf()->setTraceEvents(checked);
+    m_cbTraceEvents = ControlUtil::createCheckBox(conf().traceEvents(), [&](bool checked) {
+        conf().setTraceEvents(checked);
         ctrl()->setFlagsEdited();
     });
 

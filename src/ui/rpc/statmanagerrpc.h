@@ -13,7 +13,7 @@ class StatManagerRpc : public StatManager
 public:
     explicit StatManagerRpc(const QString &filePath, QObject *parent = nullptr);
 
-    void setConf(const FirewallConf * /*conf*/) override { }
+    void setActive(bool /*active*/) override { }
 
     bool deleteStatApp(qint64 appId) override;
 
@@ -28,6 +28,9 @@ public:
 
 public slots:
     bool clearTraffic() override;
+
+protected:
+    void setupConfManager() override { }
 };
 
 #endif // STATMANAGERRPC_H

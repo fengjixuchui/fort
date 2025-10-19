@@ -12,7 +12,6 @@
 #include <util/classhelpers.h>
 #include <util/ioc/iocservice.h>
 
-class FirewallConf;
 class LogEntryProcNew;
 class LogEntryStatTraf;
 
@@ -24,8 +23,7 @@ public:
     explicit StatManager(const QString &filePath, QObject *parent = nullptr, quint32 openFlags = 0);
     CLASS_DELETE_COPY_MOVE(StatManager)
 
-    const FirewallConf *conf() const { return m_conf; }
-    virtual void setConf(const FirewallConf *conf);
+    virtual void setActive(bool active);
 
     SqliteDb *sqliteDb() const { return m_sqliteDb.data(); }
 
@@ -61,6 +59,9 @@ signals:
 public slots:
     virtual bool clearTraffic();
 
+protected:
+    virtual void setupConfManager();
+
 private:
     bool setupDb();
 
@@ -68,7 +69,6 @@ private:
 
     void setupByConf();
 
-    void setupActivePeriod();
     void updateActivePeriod(qint32 tickSecs);
 
     void clearQuotas(bool isNewDay, bool isNewMonth);
@@ -110,6 +110,7 @@ private:
     SqliteStmt *getIdStmt(const char *sql, qint64 id);
 
 private:
+    bool m_active : 1 = false;
     bool m_isActivePeriod : 1 = false;
 
     qint32 m_trafHour = 0;
@@ -120,8 +121,6 @@ private:
 
     QTime m_activePeriodFrom;
     QTime m_activePeriodTo;
-
-    const FirewallConf *m_conf = nullptr;
 
     SqliteDbPtr m_sqliteDb;
 

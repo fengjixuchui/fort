@@ -102,7 +102,7 @@ QVariant dataDisplayScheduled(const App &app, int role)
 
 QVariant dataDisplayGroup(const App &app, int /*role*/)
 {
-    const AppGroup *appGroup = Fort::conf()->appGroupAt(app.groupIndex);
+    const AppGroup *appGroup = conf().appGroupAt(app.groupIndex);
 
     return appGroup->name();
 }
@@ -189,7 +189,7 @@ QColor AppListModelData::appActionColor() const
 
 QVariant AppListModelData::appGroupColor() const
 {
-    const AppGroup *appGroup = Fort::conf()->appGroupAt(app().groupIndex);
+    const AppGroup *appGroup = conf().appGroupAt(app().groupIndex);
     if (!appGroup->enabled())
         return inactiveColor;
 

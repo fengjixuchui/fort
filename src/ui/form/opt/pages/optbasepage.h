@@ -31,7 +31,7 @@ public:
     explicit OptBasePage(OptionsController *ctrl, QWidget *parent = nullptr);
 
     OptionsController *ctrl() const { return m_ctrl; }
-    FirewallConf *conf() const;
+    FirewallConf &conf() const;
     IniOptions &ini() const;
     IniUser &iniUser() const;
 

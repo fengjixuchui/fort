@@ -38,9 +38,9 @@ FirewallConf::BlockTrafficType blockActionByText(const QString &commandText, boo
     return FirewallConf::BlockTrafficInvalid;
 }
 
-bool reportCommandBlock(ProcessCommandResult &r, FirewallConf *conf)
+bool reportCommandBlock(ProcessCommandResult &r, const FirewallConf &conf)
 {
-    const int blockTrafficIndex = conf->blockTrafficIndex();
+    const int blockTrafficIndex = conf.blockTrafficIndex();
 
     r.commandResult = Control::CommandResult(Control::CommandResultBase + blockTrafficIndex);
 
@@ -54,13 +54,13 @@ bool processCommandBlockAction(
 {
     auto confManager = Fort::confManager();
 
-    auto conf = confManager->conf();
+    auto &conf = confManager->conf();
 
     if (report) {
         return reportCommandBlock(r, conf);
     }
 
-    conf->setBlockTrafficIndex(blockAction);
+    conf.setBlockTrafficIndex(blockAction);
 
     return confManager->saveFlags();
 }

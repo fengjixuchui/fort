@@ -29,9 +29,9 @@ FilterAction filterActionByText(const QString &commandText, bool &report)
     return FilterActionInvalid;
 }
 
-bool reportCommandFilter(ProcessCommandResult &r, FirewallConf *conf)
+bool reportCommandFilter(ProcessCommandResult &r, const FirewallConf &conf)
 {
-    const bool filterEnabled = conf->filterEnabled();
+    const bool filterEnabled = conf.filterEnabled();
 
     const FilterAction filterAction = filterEnabled ? FilterActionOn : FilterActionOff;
 
@@ -46,13 +46,13 @@ bool processCommandFilterAction(ProcessCommandResult &r, FilterAction filterActi
 {
     auto confManager = Fort::confManager();
 
-    auto conf = confManager->conf();
+    auto &conf = confManager->conf();
 
     if (report) {
         return reportCommandFilter(r, conf);
     }
 
-    conf->setFilterEnabled(filterAction == FilterActionOn);
+    conf.setFilterEnabled(filterAction == FilterActionOn);
 
     return confManager->saveFlags();
 }

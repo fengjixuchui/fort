@@ -24,7 +24,6 @@ public:
     void tearDown() override;
 
 signals:
-    void activeChanged();
     void errorMessageChanged();
     void systemTimeChanged();
 

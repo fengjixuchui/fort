@@ -87,7 +87,7 @@ EnvManager *envManager()
     return IoC<EnvManager>();
 }
 
-FirewallConf *conf()
+FirewallConf &conf()
 {
     return confManager()->conf();
 }

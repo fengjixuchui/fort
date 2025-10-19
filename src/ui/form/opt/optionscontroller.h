@@ -15,8 +15,8 @@ class OptionsController : public BaseController
 public:
     explicit OptionsController(QObject *parent = nullptr);
 
-    FirewallConf *confToEdit() { return &m_confToEdit; }
-    const FirewallConf *confToEdit() const { return &m_confToEdit; }
+    FirewallConf &confToEdit() { return m_confToEdit; }
+    const FirewallConf &confToEdit() const { return m_confToEdit; }
 
     IniOptions &iniOptToEdit() { return m_iniOptToEdit; }
     const IniOptions &iniOptToEdit() const { return m_iniOptToEdit; }

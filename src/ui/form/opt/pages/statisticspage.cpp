@@ -210,9 +210,9 @@ void StatisticsPage::setupTrafficBox()
 
 void StatisticsPage::setupLogStat()
 {
-    m_cbLogStat = ControlUtil::createCheckBox(conf()->logStat(), [&](bool checked) {
-        if (conf()->logStat() != checked) {
-            conf()->setLogStat(checked);
+    m_cbLogStat = ControlUtil::createCheckBox(conf().logStat(), [&](bool checked) {
+        if (conf().logStat() != checked) {
+            conf().setLogStat(checked);
             ctrl()->setFlagsEdited();
         }
     });
@@ -222,9 +222,9 @@ void StatisticsPage::setupLogStat()
 
 void StatisticsPage::setupLogStatNoFilter()
 {
-    m_cbLogStatNoFilter = ControlUtil::createCheckBox(conf()->logStatNoFilter(), [&](bool checked) {
-        if (conf()->logStatNoFilter() != checked) {
-            conf()->setLogStatNoFilter(checked);
+    m_cbLogStatNoFilter = ControlUtil::createCheckBox(conf().logStatNoFilter(), [&](bool checked) {
+        if (conf().logStatNoFilter() != checked) {
+            conf().setLogStatNoFilter(checked);
             ctrl()->setFlagsEdited();
         }
     });
@@ -233,13 +233,13 @@ void StatisticsPage::setupLogStatNoFilter()
 void StatisticsPage::setupActivePeriod()
 {
     m_ctpActivePeriod = new CheckTimePeriod();
-    m_ctpActivePeriod->checkBox()->setChecked(conf()->activePeriodEnabled());
-    m_ctpActivePeriod->timeEdit1()->setTime(CheckTimePeriod::toTime(conf()->activePeriodFrom()));
-    m_ctpActivePeriod->timeEdit2()->setTime(CheckTimePeriod::toTime(conf()->activePeriodTo()));
+    m_ctpActivePeriod->checkBox()->setChecked(conf().activePeriodEnabled());
+    m_ctpActivePeriod->timeEdit1()->setTime(CheckTimePeriod::toTime(conf().activePeriodFrom()));
+    m_ctpActivePeriod->timeEdit2()->setTime(CheckTimePeriod::toTime(conf().activePeriodTo()));
 
     connect(m_ctpActivePeriod->checkBox(), &QCheckBox::toggled, this, [&](bool checked) {
-        if (conf()->activePeriodEnabled() != checked) {
-            conf()->setActivePeriodEnabled(checked);
+        if (conf().activePeriodEnabled() != checked) {
+            conf().setActivePeriodEnabled(checked);
             ctrl()->setFlagsEdited();
         }
     });
@@ -247,8 +247,8 @@ void StatisticsPage::setupActivePeriod()
             [&](const QTime &time) {
                 const auto timeStr = CheckTimePeriod::fromTime(time);
 
-                if (conf()->activePeriodFrom() != timeStr) {
-                    conf()->setActivePeriodFrom(timeStr);
+                if (conf().activePeriodFrom() != timeStr) {
+                    conf().setActivePeriodFrom(timeStr);
                     ctrl()->setFlagsEdited();
                 }
             });
@@ -256,8 +256,8 @@ void StatisticsPage::setupActivePeriod()
             [&](const QTime &time) {
                 const auto timeStr = CheckTimePeriod::fromTime(time);
 
-                if (conf()->activePeriodTo() != timeStr) {
-                    conf()->setActivePeriodTo(timeStr);
+                if (conf().activePeriodTo() != timeStr) {
+                    conf().setActivePeriodTo(timeStr);
                     ctrl()->setFlagsEdited();
                 }
             });
@@ -349,27 +349,27 @@ void StatisticsPage::setupConnBox()
 void StatisticsPage::setupLogConn()
 {
     // Allowed Connection
-    m_cbLogAllowedConn = ControlUtil::createCheckBox(conf()->logAllowedConn(), [&](bool checked) {
-        if (conf()->logAllowedConn() != checked) {
-            conf()->setLogAllowedConn(checked);
+    m_cbLogAllowedConn = ControlUtil::createCheckBox(conf().logAllowedConn(), [&](bool checked) {
+        if (conf().logAllowedConn() != checked) {
+            conf().setLogAllowedConn(checked);
             ctrl()->setFlagsEdited();
         }
     });
     m_cbLogAllowedConn->setFont(GuiUtil::fontBold());
 
     // Blocked Connection
-    m_cbLogBlockedConn = ControlUtil::createCheckBox(conf()->logBlockedConn(), [&](bool checked) {
-        if (conf()->logBlockedConn() != checked) {
-            conf()->setLogBlockedConn(checked);
+    m_cbLogBlockedConn = ControlUtil::createCheckBox(conf().logBlockedConn(), [&](bool checked) {
+        if (conf().logBlockedConn() != checked) {
+            conf().setLogBlockedConn(checked);
             ctrl()->setFlagsEdited();
         }
     });
     m_cbLogBlockedConn->setFont(GuiUtil::fontBold());
 
     // Alerted Connection
-    m_cbLogAlertedConn = ControlUtil::createCheckBox(conf()->logAlertedConn(), [&](bool checked) {
-        if (conf()->logAlertedConn() != checked) {
-            conf()->setLogAlertedConn(checked);
+    m_cbLogAlertedConn = ControlUtil::createCheckBox(conf().logAlertedConn(), [&](bool checked) {
+        if (conf().logAlertedConn() != checked) {
+            conf().setLogAlertedConn(checked);
             ctrl()->setFlagsEdited();
         }
     });

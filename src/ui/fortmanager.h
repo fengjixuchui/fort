@@ -66,7 +66,7 @@ private:
     void updateDriverConf(bool onlyFlags = false);
 
     void updateLogManager(bool active);
-    void updateStatManager(FirewallConf *conf);
+    void updateStatManager(bool active);
 
 private:
     bool m_initialized : 1 = false;

@@ -454,7 +454,7 @@ void ProgGeneralPage::setupComboAppGroups()
         if (onlyFlags)
             return;
 
-        ControlUtil::setComboBoxTexts(m_comboAppGroup, conf()->appGroupNames(), /*currentIndex=*/0);
+        ControlUtil::setComboBoxTexts(m_comboAppGroup, conf().appGroupNames(), /*currentIndex=*/0);
     };
 
     refreshComboAppGroups();

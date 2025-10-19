@@ -190,10 +190,10 @@ bool StatConnManager::setupDb()
 
 void StatConnManager::setupByConf()
 {
-    FirewallConf *conf = Fort::conf();
+    const auto &conf = Fort::conf();
 
-    m_logAllowedConn = conf->logAllowedConn();
-    m_logBlockedConn = conf->logBlockedConn();
+    m_logAllowedConn = conf.logAllowedConn();
+    m_logBlockedConn = conf.logBlockedConn();
 }
 
 void StatConnManager::setupByConfIni()

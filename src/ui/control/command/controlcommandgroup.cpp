@@ -36,9 +36,9 @@ GroupAction groupActionByText(const QString &commandText, bool &report)
     return GroupActionInvalid;
 }
 
-bool reportCommandGroupAction(ProcessCommandResult &r, FirewallConf *conf, int groupIndex)
+bool reportCommandGroupAction(ProcessCommandResult &r, const FirewallConf &conf, int groupIndex)
 {
-    const auto groupAction = conf->appGroupEnabled(groupIndex) ? GroupActionOn : GroupActionOff;
+    const auto groupAction = conf.appGroupEnabled(groupIndex) ? GroupActionOn : GroupActionOff;
 
     r.commandResult = Control::CommandResult(Control::CommandResultBase + groupAction);
 
@@ -52,9 +52,9 @@ bool processCommandGroupAction(
 {
     auto confManager = Fort::confManager();
 
-    auto conf = confManager->conf();
+    auto &conf = confManager->conf();
 
-    if (groupIndex < 0 || groupIndex >= conf->appGroups().size()) {
+    if (groupIndex < 0 || groupIndex >= conf.appGroups().size()) {
         r.commandResult = Control::CommandResultError;
         r.errorMessage = "Group not found";
         return true;
@@ -64,7 +64,7 @@ bool processCommandGroupAction(
         return reportCommandGroupAction(r, conf, groupIndex);
     }
 
-    conf->setAppGroupEnabled(groupIndex, groupAction == GroupActionOn);
+    conf.setAppGroupEnabled(groupIndex, groupAction == GroupActionOn);
 
     return confManager->saveFlags();
 }

@@ -56,7 +56,7 @@ ConfZoneManager *confZoneManager();
 ControlManager *controlManager();
 DriverManager *driverManager();
 EnvManager *envManager();
-FirewallConf *conf();
+FirewallConf &conf();
 FortManager *fortManager();
 FortSettings *settings();
 HostInfoCache *hostInfoCache();

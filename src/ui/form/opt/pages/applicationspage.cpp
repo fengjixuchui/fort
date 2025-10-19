@@ -269,7 +269,7 @@ void ApplicationsPage::setupAddGroup()
             return;
         }
 
-        conf()->addAppGroupByName(text);
+        conf().addAppGroupByName(text);
 
         const int tabIndex = m_tabBar->addTab(text);
         m_tabBar->setCurrentIndex(tabIndex);
@@ -286,7 +286,7 @@ void ApplicationsPage::setupAddGroup()
 
     refreshAddGroup();
 
-    connect(conf(), &FirewallConf::appGroupsChanged, this, refreshAddGroup);
+    connect(&conf(), &FirewallConf::appGroupsChanged, this, refreshAddGroup);
 }
 
 void ApplicationsPage::setupRenameGroup()
@@ -327,7 +327,7 @@ void ApplicationsPage::setupTabBar()
         if (m_tabBar->count() <= 1)
             return;
 
-        conf()->removeAppGroup(index, index);
+        conf().removeAppGroup(index, index);
 
         const int tabIndex = m_tabBar->currentIndex();
         m_tabBar->removeTab(index);
@@ -338,7 +338,7 @@ void ApplicationsPage::setupTabBar()
         ctrl()->setOptEdited();
     });
     connect(m_tabBar, &QTabBar::tabMoved, this, [&](int from, int to) {
-        conf()->moveAppGroup(from, to);
+        conf().moveAppGroup(from, to);
         ctrl()->setOptEdited();
     });
 }
@@ -623,7 +623,7 @@ void ApplicationsPage::setupAppGroup()
 
 const QList<AppGroup *> &ApplicationsPage::appGroups() const
 {
-    return conf()->appGroups();
+    return conf().appGroups();
 }
 
 int ApplicationsPage::appGroupsCount() const
