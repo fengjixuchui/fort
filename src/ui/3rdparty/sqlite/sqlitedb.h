@@ -43,6 +43,15 @@ public:
         SyncExtra, // EXTRA
     };
 
+    enum OptimizeFlag {
+        OptimizeDefault = 0,
+        OptimizeDebug = 0x00001, // Debugging mode.
+        OptimizeAnalyze = 0x00002, // Run ANALYZE on tables that might benefit.
+        OptimizeAnalysisLimit = 0x00010, // Temporary analysis_limit to prevent excess run-time.
+        OptimizeCheckTablesSize = 0x10000, // Check the size of all tables.
+    };
+    Q_DECLARE_FLAGS(OptimizeFlags, OptimizeFlag)
+
     struct FtsTable
     {
         const QString contentTable;
@@ -90,6 +99,8 @@ public:
 
     bool vacuum();
     bool vacuumInto(const QString &filePath);
+
+    bool optimize(OptimizeFlags flags = OptimizeDefault);
 
     bool execute(const char *sql);
     bool executeStr(const QString &sql);
