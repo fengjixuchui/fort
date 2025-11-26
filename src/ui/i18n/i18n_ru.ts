@@ -1839,7 +1839,7 @@ Please check other program with the same path.</source>
     </message>
     <message>
         <source>Are you sure to remove all non-existent programs?</source>
-        <translation>Удалить все несуществующие программы?</translation>
+        <translation>Очистить список от несуществующих программ?</translation>
     </message>
     <message>
         <source>Purge Obsolete</source>
