@@ -38,7 +38,7 @@ QRegularExpressionMatch ConfUtil::matchWildcard(const QStringView path)
 {
     static const QRegularExpression wildMatcher("([*?])");
 
-    return StringUtil::match(wildMatcher, path);
+    return path.startsWith('[') || StringUtil::match(wildMatcher, path);
 }
 
 bool ConfUtil::hasWildcard(const QString &path)
